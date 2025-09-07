@@ -17,41 +17,23 @@ fn main() -> std::io::Result<()> {
 
     let block = Block {
         records: [
-            Some(Record{id: 1, name: "John Doe".parse().unwrap(), status: RecordStatus::ACTIVE }),
-            Some(Record{id: 2, name: "Dohn Joe".parse().unwrap(), status: RecordStatus::ACTIVE }),
-            Some(Record{id: 3, name: "Mohn Joe".parse().unwrap(), status: RecordStatus::ACTIVE }),
-
-        ]
-    };
-
-    let block2 = Block {
-        records: [
-            Some(Record{id: 4, name: "Lohn Smoe".parse().unwrap(), status: RecordStatus::ACTIVE }),
-            Some(Record{id: 5, name: "La Vaca Saturno Saturnita".parse().unwrap(), status: RecordStatus::ACTIVE }),
-            None,
-        ]
+            (Record::new(1, "John Doe")),
+            (Record::new(2, "Dohanes Joehan")),
+            Record::new(-1, "")
+        ],
     };
 
     block.write_to_file(&mut file);
-    block2.write_to_file(&mut file);
 
     let mut serial_file = SerialFile::new(file);
 
-    serial_file.write_record(Record {
-        id: 6, name: "New Record1".parse().unwrap(),
-        status: RecordStatus::ACTIVE,
-    })?;
+    serial_file.write_record(Record::new(3, "Test Testing"))?;
+    serial_file.write_record(Record::new(4, "Test Testingwasd"))?;
+    serial_file.write_record(Record::new(5, "Test Testingawdawq"))?;
 
-    serial_file.write_record(Record {
-        id: 7, name: "New Record2".parse().unwrap(),
-        status: RecordStatus::ACTIVE,
-    })?;
 
-    println!("Record: {:?}", serial_file.find_record(6));
+    serial_file.print_records()?;
 
-    serial_file.delete_logically(6)?;
-
-    serial_file.print_file()?;
 
     Ok(())
 }
